@@ -14,25 +14,20 @@ Object {
 
 #pragma once
 
-#include <react/renderer/components/RNCodegenModuleFixtures/EventEmitters.h>
 #include <react/renderer/components/RNCodegenModuleFixtures/Props.h>
-#include <react/renderer/components/RNCodegenModuleFixtures/States.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <jsi/jsi.h>
 
 namespace facebook {
 namespace react {
 
-JSI_EXPORT extern const char ArrayPropsNativeComponentViewComponentName[];
+extern const char ArrayPropsNativeComponentViewComponentName[];
 
 /*
  * \`ShadowNode\` for <ArrayPropsNativeComponentView> component.
  */
 using ArrayPropsNativeComponentViewShadowNode = ConcreteViewShadowNode<
     ArrayPropsNativeComponentViewComponentName,
-    ArrayPropsNativeComponentViewProps,
-    ArrayPropsNativeComponentViewEventEmitter,
-    ArrayPropsNativeComponentViewState>;
+    ArrayPropsNativeComponentViewProps>;
 
 } // namespace react
 } // namespace facebook
@@ -54,25 +49,20 @@ Object {
 
 #pragma once
 
-#include <react/renderer/components/RNCodegenModuleFixtures/EventEmitters.h>
 #include <react/renderer/components/RNCodegenModuleFixtures/Props.h>
-#include <react/renderer/components/RNCodegenModuleFixtures/States.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <jsi/jsi.h>
 
 namespace facebook {
 namespace react {
 
-JSI_EXPORT extern const char BooleanPropNativeComponentViewComponentName[];
+extern const char BooleanPropNativeComponentViewComponentName[];
 
 /*
  * \`ShadowNode\` for <BooleanPropNativeComponentView> component.
  */
 using BooleanPropNativeComponentViewShadowNode = ConcreteViewShadowNode<
     BooleanPropNativeComponentViewComponentName,
-    BooleanPropNativeComponentViewProps,
-    BooleanPropNativeComponentViewEventEmitter,
-    BooleanPropNativeComponentViewState>;
+    BooleanPropNativeComponentViewProps>;
 
 } // namespace react
 } // namespace facebook
@@ -94,25 +84,20 @@ Object {
 
 #pragma once
 
-#include <react/renderer/components/RNCodegenModuleFixtures/EventEmitters.h>
 #include <react/renderer/components/RNCodegenModuleFixtures/Props.h>
-#include <react/renderer/components/RNCodegenModuleFixtures/States.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <jsi/jsi.h>
 
 namespace facebook {
 namespace react {
 
-JSI_EXPORT extern const char ColorPropNativeComponentViewComponentName[];
+extern const char ColorPropNativeComponentViewComponentName[];
 
 /*
  * \`ShadowNode\` for <ColorPropNativeComponentView> component.
  */
 using ColorPropNativeComponentViewShadowNode = ConcreteViewShadowNode<
     ColorPropNativeComponentViewComponentName,
-    ColorPropNativeComponentViewProps,
-    ColorPropNativeComponentViewEventEmitter,
-    ColorPropNativeComponentViewState>;
+    ColorPropNativeComponentViewProps>;
 
 } // namespace react
 } // namespace facebook
@@ -134,25 +119,20 @@ Object {
 
 #pragma once
 
-#include <react/renderer/components/RNCodegenModuleFixtures/EventEmitters.h>
 #include <react/renderer/components/RNCodegenModuleFixtures/Props.h>
-#include <react/renderer/components/RNCodegenModuleFixtures/States.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <jsi/jsi.h>
 
 namespace facebook {
 namespace react {
 
-JSI_EXPORT extern const char EdgeInsetsPropNativeComponentViewComponentName[];
+extern const char EdgeInsetsPropNativeComponentViewComponentName[];
 
 /*
  * \`ShadowNode\` for <EdgeInsetsPropNativeComponentView> component.
  */
 using EdgeInsetsPropNativeComponentViewShadowNode = ConcreteViewShadowNode<
     EdgeInsetsPropNativeComponentViewComponentName,
-    EdgeInsetsPropNativeComponentViewProps,
-    EdgeInsetsPropNativeComponentViewEventEmitter,
-    EdgeInsetsPropNativeComponentViewState>;
+    EdgeInsetsPropNativeComponentViewProps>;
 
 } // namespace react
 } // namespace facebook
@@ -174,25 +154,20 @@ Object {
 
 #pragma once
 
-#include <react/renderer/components/RNCodegenModuleFixtures/EventEmitters.h>
 #include <react/renderer/components/RNCodegenModuleFixtures/Props.h>
-#include <react/renderer/components/RNCodegenModuleFixtures/States.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <jsi/jsi.h>
 
 namespace facebook {
 namespace react {
 
-JSI_EXPORT extern const char EnumPropNativeComponentViewComponentName[];
+extern const char EnumPropNativeComponentViewComponentName[];
 
 /*
  * \`ShadowNode\` for <EnumPropNativeComponentView> component.
  */
 using EnumPropNativeComponentViewShadowNode = ConcreteViewShadowNode<
     EnumPropNativeComponentViewComponentName,
-    EnumPropNativeComponentViewProps,
-    EnumPropNativeComponentViewEventEmitter,
-    EnumPropNativeComponentViewState>;
+    EnumPropNativeComponentViewProps>;
 
 } // namespace react
 } // namespace facebook
@@ -216,14 +191,12 @@ Object {
 
 #include <react/renderer/components/RNCodegenModuleFixtures/EventEmitters.h>
 #include <react/renderer/components/RNCodegenModuleFixtures/Props.h>
-#include <react/renderer/components/RNCodegenModuleFixtures/States.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <jsi/jsi.h>
 
 namespace facebook {
 namespace react {
 
-JSI_EXPORT extern const char EventNestedObjectPropsNativeComponentViewComponentName[];
+extern const char EventNestedObjectPropsNativeComponentViewComponentName[];
 
 /*
  * \`ShadowNode\` for <EventNestedObjectPropsNativeComponentView> component.
@@ -231,8 +204,7 @@ JSI_EXPORT extern const char EventNestedObjectPropsNativeComponentViewComponentN
 using EventNestedObjectPropsNativeComponentViewShadowNode = ConcreteViewShadowNode<
     EventNestedObjectPropsNativeComponentViewComponentName,
     EventNestedObjectPropsNativeComponentViewProps,
-    EventNestedObjectPropsNativeComponentViewEventEmitter,
-    EventNestedObjectPropsNativeComponentViewState>;
+EventNestedObjectPropsNativeComponentViewEventEmitter>;
 
 } // namespace react
 } // namespace facebook
@@ -256,14 +228,12 @@ Object {
 
 #include <react/renderer/components/RNCodegenModuleFixtures/EventEmitters.h>
 #include <react/renderer/components/RNCodegenModuleFixtures/Props.h>
-#include <react/renderer/components/RNCodegenModuleFixtures/States.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <jsi/jsi.h>
 
 namespace facebook {
 namespace react {
 
-JSI_EXPORT extern const char EventPropsNativeComponentViewComponentName[];
+extern const char EventPropsNativeComponentViewComponentName[];
 
 /*
  * \`ShadowNode\` for <EventPropsNativeComponentView> component.
@@ -271,8 +241,7 @@ JSI_EXPORT extern const char EventPropsNativeComponentViewComponentName[];
 using EventPropsNativeComponentViewShadowNode = ConcreteViewShadowNode<
     EventPropsNativeComponentViewComponentName,
     EventPropsNativeComponentViewProps,
-    EventPropsNativeComponentViewEventEmitter,
-    EventPropsNativeComponentViewState>;
+EventPropsNativeComponentViewEventEmitter>;
 
 } // namespace react
 } // namespace facebook
@@ -294,25 +263,20 @@ Object {
 
 #pragma once
 
-#include <react/renderer/components/RNCodegenModuleFixtures/EventEmitters.h>
 #include <react/renderer/components/RNCodegenModuleFixtures/Props.h>
-#include <react/renderer/components/RNCodegenModuleFixtures/States.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <jsi/jsi.h>
 
 namespace facebook {
 namespace react {
 
-JSI_EXPORT extern const char FloatPropsNativeComponentViewComponentName[];
+extern const char FloatPropsNativeComponentViewComponentName[];
 
 /*
  * \`ShadowNode\` for <FloatPropsNativeComponentView> component.
  */
 using FloatPropsNativeComponentViewShadowNode = ConcreteViewShadowNode<
     FloatPropsNativeComponentViewComponentName,
-    FloatPropsNativeComponentViewProps,
-    FloatPropsNativeComponentViewEventEmitter,
-    FloatPropsNativeComponentViewState>;
+    FloatPropsNativeComponentViewProps>;
 
 } // namespace react
 } // namespace facebook
@@ -334,25 +298,20 @@ Object {
 
 #pragma once
 
-#include <react/renderer/components/RNCodegenModuleFixtures/EventEmitters.h>
 #include <react/renderer/components/RNCodegenModuleFixtures/Props.h>
-#include <react/renderer/components/RNCodegenModuleFixtures/States.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <jsi/jsi.h>
 
 namespace facebook {
 namespace react {
 
-JSI_EXPORT extern const char ImagePropNativeComponentViewComponentName[];
+extern const char ImagePropNativeComponentViewComponentName[];
 
 /*
  * \`ShadowNode\` for <ImagePropNativeComponentView> component.
  */
 using ImagePropNativeComponentViewShadowNode = ConcreteViewShadowNode<
     ImagePropNativeComponentViewComponentName,
-    ImagePropNativeComponentViewProps,
-    ImagePropNativeComponentViewEventEmitter,
-    ImagePropNativeComponentViewState>;
+    ImagePropNativeComponentViewProps>;
 
 } // namespace react
 } // namespace facebook
@@ -374,25 +333,20 @@ Object {
 
 #pragma once
 
-#include <react/renderer/components/RNCodegenModuleFixtures/EventEmitters.h>
 #include <react/renderer/components/RNCodegenModuleFixtures/Props.h>
-#include <react/renderer/components/RNCodegenModuleFixtures/States.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <jsi/jsi.h>
 
 namespace facebook {
 namespace react {
 
-JSI_EXPORT extern const char IntegerPropNativeComponentViewComponentName[];
+extern const char IntegerPropNativeComponentViewComponentName[];
 
 /*
  * \`ShadowNode\` for <IntegerPropNativeComponentView> component.
  */
 using IntegerPropNativeComponentViewShadowNode = ConcreteViewShadowNode<
     IntegerPropNativeComponentViewComponentName,
-    IntegerPropNativeComponentViewProps,
-    IntegerPropNativeComponentViewEventEmitter,
-    IntegerPropNativeComponentViewState>;
+    IntegerPropNativeComponentViewProps>;
 
 } // namespace react
 } // namespace facebook
@@ -414,11 +368,8 @@ Object {
 
 #pragma once
 
-#include <react/renderer/components/RNCodegenModuleFixtures/EventEmitters.h>
 #include <react/renderer/components/RNCodegenModuleFixtures/Props.h>
-#include <react/renderer/components/RNCodegenModuleFixtures/States.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <jsi/jsi.h>
 
 namespace facebook {
 namespace react {
@@ -445,25 +396,20 @@ Object {
 
 #pragma once
 
-#include <react/renderer/components/RNCodegenModuleFixtures/EventEmitters.h>
 #include <react/renderer/components/RNCodegenModuleFixtures/Props.h>
-#include <react/renderer/components/RNCodegenModuleFixtures/States.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <jsi/jsi.h>
 
 namespace facebook {
 namespace react {
 
-JSI_EXPORT extern const char MultiNativePropNativeComponentViewComponentName[];
+extern const char MultiNativePropNativeComponentViewComponentName[];
 
 /*
  * \`ShadowNode\` for <MultiNativePropNativeComponentView> component.
  */
 using MultiNativePropNativeComponentViewShadowNode = ConcreteViewShadowNode<
     MultiNativePropNativeComponentViewComponentName,
-    MultiNativePropNativeComponentViewProps,
-    MultiNativePropNativeComponentViewEventEmitter,
-    MultiNativePropNativeComponentViewState>;
+    MultiNativePropNativeComponentViewProps>;
 
 } // namespace react
 } // namespace facebook
@@ -485,25 +431,20 @@ Object {
 
 #pragma once
 
-#include <react/renderer/components/RNCodegenModuleFixtures/EventEmitters.h>
 #include <react/renderer/components/RNCodegenModuleFixtures/Props.h>
-#include <react/renderer/components/RNCodegenModuleFixtures/States.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <jsi/jsi.h>
 
 namespace facebook {
 namespace react {
 
-JSI_EXPORT extern const char NoPropsNoEventsNativeComponentViewComponentName[];
+extern const char NoPropsNoEventsNativeComponentViewComponentName[];
 
 /*
  * \`ShadowNode\` for <NoPropsNoEventsNativeComponentView> component.
  */
 using NoPropsNoEventsNativeComponentViewShadowNode = ConcreteViewShadowNode<
     NoPropsNoEventsNativeComponentViewComponentName,
-    NoPropsNoEventsNativeComponentViewProps,
-    NoPropsNoEventsNativeComponentViewEventEmitter,
-    NoPropsNoEventsNativeComponentViewState>;
+    NoPropsNoEventsNativeComponentViewProps>;
 
 } // namespace react
 } // namespace facebook
@@ -525,25 +466,20 @@ Object {
 
 #pragma once
 
-#include <react/renderer/components/RNCodegenModuleFixtures/EventEmitters.h>
 #include <react/renderer/components/RNCodegenModuleFixtures/Props.h>
-#include <react/renderer/components/RNCodegenModuleFixtures/States.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <jsi/jsi.h>
 
 namespace facebook {
 namespace react {
 
-JSI_EXPORT extern const char ObjectPropsNativeComponentComponentName[];
+extern const char ObjectPropsNativeComponentComponentName[];
 
 /*
  * \`ShadowNode\` for <ObjectPropsNativeComponent> component.
  */
 using ObjectPropsNativeComponentShadowNode = ConcreteViewShadowNode<
     ObjectPropsNativeComponentComponentName,
-    ObjectPropsNativeComponentProps,
-    ObjectPropsNativeComponentEventEmitter,
-    ObjectPropsNativeComponentState>;
+    ObjectPropsNativeComponentProps>;
 
 } // namespace react
 } // namespace facebook
@@ -565,25 +501,20 @@ Object {
 
 #pragma once
 
-#include <react/renderer/components/RNCodegenModuleFixtures/EventEmitters.h>
 #include <react/renderer/components/RNCodegenModuleFixtures/Props.h>
-#include <react/renderer/components/RNCodegenModuleFixtures/States.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <jsi/jsi.h>
 
 namespace facebook {
 namespace react {
 
-JSI_EXPORT extern const char PointPropNativeComponentViewComponentName[];
+extern const char PointPropNativeComponentViewComponentName[];
 
 /*
  * \`ShadowNode\` for <PointPropNativeComponentView> component.
  */
 using PointPropNativeComponentViewShadowNode = ConcreteViewShadowNode<
     PointPropNativeComponentViewComponentName,
-    PointPropNativeComponentViewProps,
-    PointPropNativeComponentViewEventEmitter,
-    PointPropNativeComponentViewState>;
+    PointPropNativeComponentViewProps>;
 
 } // namespace react
 } // namespace facebook
@@ -605,25 +536,20 @@ Object {
 
 #pragma once
 
-#include <react/renderer/components/RNCodegenModuleFixtures/EventEmitters.h>
 #include <react/renderer/components/RNCodegenModuleFixtures/Props.h>
-#include <react/renderer/components/RNCodegenModuleFixtures/States.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <jsi/jsi.h>
 
 namespace facebook {
 namespace react {
 
-JSI_EXPORT extern const char StringPropNativeComponentViewComponentName[];
+extern const char StringPropNativeComponentViewComponentName[];
 
 /*
  * \`ShadowNode\` for <StringPropNativeComponentView> component.
  */
 using StringPropNativeComponentViewShadowNode = ConcreteViewShadowNode<
     StringPropNativeComponentViewComponentName,
-    StringPropNativeComponentViewProps,
-    StringPropNativeComponentViewEventEmitter,
-    StringPropNativeComponentViewState>;
+    StringPropNativeComponentViewProps>;
 
 } // namespace react
 } // namespace facebook

@@ -43,7 +43,7 @@ const IMAGE_SIZE = [IMAGE_DIMENSION, IMAGE_DIMENSION];
 
 const IS_RTL = I18nManager.isRTL;
 
-function ListItem(props: {imageSource: number}) {
+function ListItem(props) {
   return (
     <View style={styles.row}>
       <View style={styles.column1}>
@@ -127,10 +127,7 @@ const IconsExample = withRTLState(({isRTL, setRTL}) => {
   );
 });
 
-function AnimationBlock(props: {
-  imgStyle: {transform: Array<{scaleX: number} | {translateX: any}>},
-  onPress: (e: any) => void,
-}) {
+function AnimationBlock(props) {
   return (
     <View style={styles.block}>
       <TouchableWithoutFeedback onPress={props.onPress}>
@@ -147,19 +144,11 @@ type RTLSwitcherComponentState = {|
   isRTL: boolean,
 |};
 
-function withRTLState(
-  Component: ({
-    isRTL: boolean,
-    setRTL: (isRTL: boolean) => void,
-    style?: any,
-  }) => React.Node,
-) {
+function withRTLState(Component) {
   return class extends React.Component<
     {style?: any},
     RTLSwitcherComponentState,
   > {
-    /* $FlowFixMe[missing-local-annot] The type annotation(s) required by
-     * Flow's LTI update could not be added via codemod */
     constructor(...args) {
       super(...args);
       this.state = {
@@ -167,9 +156,8 @@ function withRTLState(
       };
     }
 
-    // $FlowFixMe[missing-local-annot]
     render() {
-      const setRTL = (isRTL: boolean) => this.setState({isRTL: isRTL});
+      const setRTL = isRTL => this.setState({isRTL: isRTL});
       return (
         <Component isRTL={this.state.isRTL} setRTL={setRTL} {...this.props} />
       );
@@ -177,12 +165,7 @@ function withRTLState(
   };
 }
 
-const RTLToggler = ({
-  isRTL,
-  setRTL,
-}:
-  | {isRTL: any, setRTL: any}
-  | {isRTL: boolean, setRTL: (isRTL: boolean) => void}) => {
+const RTLToggler = ({isRTL, setRTL}) => {
   if (Platform.OS === 'android') {
     return <Text style={styles.rtlToggler}>{isRTL ? 'RTL' : 'LTR'}</Text>;
   }
@@ -207,7 +190,7 @@ class RTLToggleExample extends React.Component<any, RTLToggleState> {
     };
   }
 
-  render(): React.Node {
+  render() {
     return (
       <View>
         <View style={styles.directionBox}>
@@ -268,7 +251,7 @@ class AnimationExample extends React.Component<any, AnimationState> {
     };
   }
 
-  render(): React.Node {
+  render() {
     return (
       <View>
         <RTLToggler setRTL={this.props.setRTL} isRTL={this.props.isRTL} />
@@ -545,7 +528,7 @@ const BorderExample = withRTLState(({isRTL, setRTL}) => {
   );
 });
 
-const directionStyle = (isRTL: boolean) =>
+const directionStyle = isRTL =>
   Platform.OS !== 'android' ? {direction: isRTL ? 'rtl' : 'ltr'} : null;
 
 const styles = StyleSheet.create({

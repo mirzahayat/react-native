@@ -22,7 +22,7 @@ import type {
 
 import type {AliasResolver} from './Utils';
 const {createAliasResolver, getModules} = require('./Utils');
-const {unwrapNullable} = require('../../parsers/parsers-commons');
+const {unwrapNullable} = require('../../parsers/flow/modules/utils');
 
 type FilesOutput = Map<string, string>;
 
@@ -104,15 +104,14 @@ function translateFunctionParamToJavaType(
     unwrapNullable<NativeModuleParamTypeAnnotation>(nullableTypeAnnotation);
   const isRequired = !optional && !nullable;
 
-  function wrapNullable(javaType: string, nullableType?: string) {
+  function wrapIntoNullableIfNeeded(generatedType: string) {
     if (!isRequired) {
       imports.add('javax.annotation.Nullable');
-      return `@Nullable ${nullableType ?? javaType}`;
+      return `@Nullable ${generatedType}`;
     }
-    return javaType;
+    return generatedType;
   }
 
-  // FIXME: support class alias for args
   let realTypeAnnotation = typeAnnotation;
   if (realTypeAnnotation.type === 'TypeAliasTypeAnnotation') {
     realTypeAnnotation = resolveAlias(realTypeAnnotation.name);
@@ -122,61 +121,42 @@ function translateFunctionParamToJavaType(
     case 'ReservedTypeAnnotation':
       switch (realTypeAnnotation.name) {
         case 'RootTag':
-          return wrapNullable('double', 'Double');
+          return !isRequired ? 'Double' : 'double';
         default:
           (realTypeAnnotation.name: empty);
           throw new Error(createErrorMessage(realTypeAnnotation.name));
       }
     case 'StringTypeAnnotation':
-      return wrapNullable('String');
+      return wrapIntoNullableIfNeeded('String');
     case 'NumberTypeAnnotation':
-      return wrapNullable('double', 'Double');
+      return !isRequired ? 'Double' : 'double';
     case 'FloatTypeAnnotation':
-      return wrapNullable('double', 'Double');
+      return !isRequired ? 'Double' : 'double';
     case 'DoubleTypeAnnotation':
-      return wrapNullable('double', 'Double');
+      return !isRequired ? 'Double' : 'double';
     case 'Int32TypeAnnotation':
-      return wrapNullable('double', 'Double');
+      return !isRequired ? 'Double' : 'double';
     case 'BooleanTypeAnnotation':
-      return wrapNullable('boolean', 'Boolean');
-    case 'EnumDeclaration':
-      switch (realTypeAnnotation.memberType) {
-        case 'NumberTypeAnnotation':
-          return wrapNullable('double', 'Double');
-        case 'StringTypeAnnotation':
-          return wrapNullable('String');
-        default:
-          throw new Error(createErrorMessage(realTypeAnnotation.type));
-      }
-    case 'UnionTypeAnnotation':
-      switch (typeAnnotation.memberType) {
-        case 'NumberTypeAnnotation':
-          return wrapNullable('double', 'Double');
-        case 'ObjectTypeAnnotation':
-          imports.add('com.facebook.react.bridge.ReadableMap');
-          return wrapNullable('ReadableMap');
-        case 'StringTypeAnnotation':
-          return wrapNullable('String');
-        default:
-          throw new Error(
-            `Unsupported union member returning value, found: ${realTypeAnnotation.memberType}"`,
-          );
-      }
+      return !isRequired ? 'Boolean' : 'boolean';
     case 'ObjectTypeAnnotation':
       imports.add('com.facebook.react.bridge.ReadableMap');
-      return wrapNullable('ReadableMap');
+      if (typeAnnotation.type === 'TypeAliasTypeAnnotation') {
+        // No class alias for args, so it still falls under ReadableMap.
+        return 'ReadableMap';
+      }
+      return 'ReadableMap';
     case 'GenericObjectTypeAnnotation':
       // Treat this the same as ObjectTypeAnnotation for now.
       imports.add('com.facebook.react.bridge.ReadableMap');
-      return wrapNullable('ReadableMap');
+      return 'ReadableMap';
     case 'ArrayTypeAnnotation':
       imports.add('com.facebook.react.bridge.ReadableArray');
-      return wrapNullable('ReadableArray');
+      return 'ReadableArray';
     case 'FunctionTypeAnnotation':
       imports.add('com.facebook.react.bridge.Callback');
-      return wrapNullable('Callback');
+      return 'Callback';
     default:
-      (realTypeAnnotation.type: 'EnumDeclaration' | 'MixedTypeAnnotation');
+      (realTypeAnnotation.type: empty);
       throw new Error(createErrorMessage(realTypeAnnotation.type));
   }
 }
@@ -192,15 +172,14 @@ function translateFunctionReturnTypeToJavaType(
       nullableReturnTypeAnnotation,
     );
 
-  function wrapNullable(javaType: string, nullableType?: string) {
+  function wrapIntoNullableIfNeeded(generatedType: string) {
     if (nullable) {
       imports.add('javax.annotation.Nullable');
-      return `@Nullable ${nullableType ?? javaType}`;
+      return `@Nullable ${generatedType}`;
     }
-    return javaType;
+    return generatedType;
   }
 
-  // FIXME: support class alias for args
   let realTypeAnnotation = returnTypeAnnotation;
   if (realTypeAnnotation.type === 'TypeAliasTypeAnnotation') {
     realTypeAnnotation = resolveAlias(realTypeAnnotation.name);
@@ -210,7 +189,7 @@ function translateFunctionReturnTypeToJavaType(
     case 'ReservedTypeAnnotation':
       switch (realTypeAnnotation.name) {
         case 'RootTag':
-          return wrapNullable('double', 'Double');
+          return nullable ? 'Double' : 'double';
         default:
           (realTypeAnnotation.name: empty);
           throw new Error(createErrorMessage(realTypeAnnotation.name));
@@ -220,51 +199,28 @@ function translateFunctionReturnTypeToJavaType(
     case 'PromiseTypeAnnotation':
       return 'void';
     case 'StringTypeAnnotation':
-      return wrapNullable('String');
+      return wrapIntoNullableIfNeeded('String');
     case 'NumberTypeAnnotation':
-      return wrapNullable('double', 'Double');
+      return nullable ? 'Double' : 'double';
     case 'FloatTypeAnnotation':
-      return wrapNullable('double', 'Double');
+      return nullable ? 'Double' : 'double';
     case 'DoubleTypeAnnotation':
-      return wrapNullable('double', 'Double');
+      return nullable ? 'Double' : 'double';
     case 'Int32TypeAnnotation':
-      return wrapNullable('double', 'Double');
+      return nullable ? 'Double' : 'double';
     case 'BooleanTypeAnnotation':
-      return wrapNullable('boolean', 'Boolean');
-    case 'EnumDeclaration':
-      switch (realTypeAnnotation.memberType) {
-        case 'NumberTypeAnnotation':
-          return wrapNullable('double', 'Double');
-        case 'StringTypeAnnotation':
-          return wrapNullable('String');
-        default:
-          throw new Error(createErrorMessage(realTypeAnnotation.type));
-      }
-    case 'UnionTypeAnnotation':
-      switch (realTypeAnnotation.memberType) {
-        case 'NumberTypeAnnotation':
-          return wrapNullable('double', 'Double');
-        case 'ObjectTypeAnnotation':
-          imports.add('com.facebook.react.bridge.WritableMap');
-          return wrapNullable('WritableMap');
-        case 'StringTypeAnnotation':
-          return wrapNullable('String');
-        default:
-          throw new Error(
-            `Unsupported union member returning value, found: ${realTypeAnnotation.memberType}"`,
-          );
-      }
+      return nullable ? 'Boolean' : 'boolean';
     case 'ObjectTypeAnnotation':
       imports.add('com.facebook.react.bridge.WritableMap');
-      return wrapNullable('WritableMap');
+      return wrapIntoNullableIfNeeded('WritableMap');
     case 'GenericObjectTypeAnnotation':
       imports.add('com.facebook.react.bridge.WritableMap');
-      return wrapNullable('WritableMap');
+      return wrapIntoNullableIfNeeded('WritableMap');
     case 'ArrayTypeAnnotation':
       imports.add('com.facebook.react.bridge.WritableArray');
-      return wrapNullable('WritableArray');
+      return wrapIntoNullableIfNeeded('WritableArray');
     default:
-      (realTypeAnnotation.type: 'EnumDeclaration' | 'MixedTypeAnnotation');
+      (realTypeAnnotation.type: empty);
       throw new Error(createErrorMessage(realTypeAnnotation.type));
   }
 }
@@ -307,28 +263,6 @@ function getFalsyReturnStatementFromReturnType(
       return nullable ? 'return null;' : 'return 0;';
     case 'BooleanTypeAnnotation':
       return nullable ? 'return null;' : 'return false;';
-    case 'EnumDeclaration':
-      switch (realTypeAnnotation.memberType) {
-        case 'NumberTypeAnnotation':
-          return nullable ? 'return null;' : 'return 0;';
-        case 'StringTypeAnnotation':
-          return nullable ? 'return null;' : 'return "";';
-        default:
-          throw new Error(createErrorMessage(realTypeAnnotation.type));
-      }
-    case 'UnionTypeAnnotation':
-      switch (realTypeAnnotation.memberType) {
-        case 'NumberTypeAnnotation':
-          return nullable ? 'return null;' : 'return 0;';
-        case 'ObjectTypeAnnotation':
-          return 'return null;';
-        case 'StringTypeAnnotation':
-          return nullable ? 'return null;' : 'return "";';
-        default:
-          throw new Error(
-            `Unsupported union member returning value, found: ${realTypeAnnotation.memberType}"`,
-          );
-      }
     case 'StringTypeAnnotation':
       return nullable ? 'return null;' : 'return "";';
     case 'ObjectTypeAnnotation':
@@ -338,7 +272,7 @@ function getFalsyReturnStatementFromReturnType(
     case 'ArrayTypeAnnotation':
       return 'return null;';
     default:
-      (realTypeAnnotation.type: 'EnumDeclaration' | 'MixedTypeAnnotation');
+      (realTypeAnnotation.type: empty);
       throw new Error(createErrorMessage(realTypeAnnotation.type));
   }
 }
@@ -430,7 +364,7 @@ module.exports = {
     packageName?: string,
     assumeNonnull: boolean = false,
   ): FilesOutput {
-    const files = new Map<string, string>();
+    const files = new Map();
     const nativeModules = getModules(schema);
 
     const normalizedPackageName =

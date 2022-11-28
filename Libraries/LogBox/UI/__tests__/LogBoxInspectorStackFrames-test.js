@@ -4,23 +4,21 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @flow strict-local
  * @format
- * @oncall react_native
+ * @emails oncall+react_native
+ * @flow strict-local
  */
 
-import type {StackFrame} from '../../../Core/NativeExceptionsManager';
-
+const React = require('react');
 import LogBoxInspectorStackFrames, {
   getCollapseMessage,
 } from '../LogBoxInspectorStackFrames';
 
-const render = require('../../../../jest/renderer');
-const LogBoxLog = require('../../Data/LogBoxLog').default;
 const {} = require('../LogBoxInspectorStackFrames');
-const React = require('react');
+const LogBoxLog = require('../../Data/LogBoxLog').default;
+const render = require('../../../../jest/renderer');
 
-const createLogWithFrames = (collapsedOptions: Array<?boolean>) => {
+const createLogWithFrames = collapsedOptions => {
   return new LogBoxLog({
     level: 'warn',
     isComponentError: false,
@@ -34,8 +32,8 @@ const createLogWithFrames = (collapsedOptions: Array<?boolean>) => {
   });
 };
 
-const createCollapsedFrames = (collapsedOptions: Array<?boolean>) => {
-  return collapsedOptions.map((option): StackFrame => ({
+const createCollapsedFrames = collapsedOptions => {
+  return collapsedOptions.map(option => ({
     column: 1,
     file: 'dependency.js',
     lineNumber: 1,

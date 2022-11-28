@@ -14,11 +14,10 @@ import * as React from 'react';
 export function SectionList_onEndReached(): React.Node {
   const [output, setOutput] = React.useState('');
   const exampleProps = {
-    onEndReached: (info: {distanceFromEnd: number, ...}) =>
-      setOutput('onEndReached'),
+    onEndReached: info => setOutput('onEndReached'),
     onEndReachedThreshold: 0,
   };
-  const ref = React.useRef<any>(null);
+  const ref = React.useRef(null);
 
   const onTest = () => {
     const scrollResponder = ref?.current?.getScrollResponder();

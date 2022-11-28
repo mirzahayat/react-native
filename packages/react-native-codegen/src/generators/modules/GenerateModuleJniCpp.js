@@ -22,7 +22,7 @@ import type {
 
 import type {AliasResolver} from './Utils';
 const {createAliasResolver, getModules} = require('./Utils');
-const {unwrapNullable} = require('../../parsers/parsers-commons');
+const {unwrapNullable} = require('../../parsers/flow/modules/utils');
 
 type FilesOutput = Map<string, string>;
 
@@ -47,8 +47,7 @@ const HostFunctionTemplate = ({
   jsReturnType: JSReturnType,
 }>) => {
   return `static facebook::jsi::Value __hostFunction_${hasteModuleName}SpecJSI_${propertyName}(facebook::jsi::Runtime& rt, TurboModule &turboModule, const facebook::jsi::Value* args, size_t count) {
-  static jmethodID cachedMethodId = nullptr;
-  return static_cast<JavaTurboModule &>(turboModule).invokeJavaMethod(rt, ${jsReturnType}, "${propertyName}", "${jniSignature}", args, count, cachedMethodId);
+  return static_cast<JavaTurboModule &>(turboModule).invokeJavaMethod(rt, ${jsReturnType}, "${propertyName}", "${jniSignature}", args, count);
 }`;
 };
 
@@ -115,7 +114,7 @@ namespace react {
 
 ${modules}
 
-std::shared_ptr<TurboModule> ${libraryName}_ModuleProvider(const std::string &moduleName, const JavaTurboModule::InitParams &params) {
+std::shared_ptr<TurboModule> ${libraryName}_ModuleProvider(const std::string moduleName, const JavaTurboModule::InitParams &params) {
 ${moduleLookups.map(ModuleLookupTemplate).join('\n')}
   return nullptr;
 }
@@ -154,30 +153,6 @@ function translateReturnTypeToKind(
       return 'StringKind';
     case 'BooleanTypeAnnotation':
       return 'BooleanKind';
-    case 'EnumDeclaration':
-      switch (typeAnnotation.memberType) {
-        case 'NumberTypeAnnotation':
-          return 'NumberKind';
-        case 'StringTypeAnnotation':
-          return 'StringKind';
-        default:
-          throw new Error(
-            `Unknown enum prop type for returning value, found: ${realTypeAnnotation.type}"`,
-          );
-      }
-    case 'UnionTypeAnnotation':
-      switch (typeAnnotation.memberType) {
-        case 'NumberTypeAnnotation':
-          return 'NumberKind';
-        case 'ObjectTypeAnnotation':
-          return 'ObjectKind';
-        case 'StringTypeAnnotation':
-          return 'StringKind';
-        default:
-          throw new Error(
-            `Unsupported union member returning value, found: ${realTypeAnnotation.memberType}"`,
-          );
-      }
     case 'NumberTypeAnnotation':
       return 'NumberKind';
     case 'DoubleTypeAnnotation':
@@ -195,7 +170,7 @@ function translateReturnTypeToKind(
     case 'ArrayTypeAnnotation':
       return 'ArrayKind';
     default:
-      (realTypeAnnotation.type: 'EnumDeclaration' | 'MixedTypeAnnotation');
+      (realTypeAnnotation.type: empty);
       throw new Error(
         `Unknown prop type for returning value, found: ${realTypeAnnotation.type}"`,
       );
@@ -233,30 +208,6 @@ function translateParamTypeToJniType(
       return 'Ljava/lang/String;';
     case 'BooleanTypeAnnotation':
       return !isRequired ? 'Ljava/lang/Boolean;' : 'Z';
-    case 'EnumDeclaration':
-      switch (typeAnnotation.memberType) {
-        case 'NumberTypeAnnotation':
-          return !isRequired ? 'Ljava/lang/Double;' : 'D';
-        case 'StringTypeAnnotation':
-          return 'Ljava/lang/String;';
-        default:
-          throw new Error(
-            `Unknown enum prop type for method arg, found: ${realTypeAnnotation.type}"`,
-          );
-      }
-    case 'UnionTypeAnnotation':
-      switch (typeAnnotation.memberType) {
-        case 'NumberTypeAnnotation':
-          return !isRequired ? 'Ljava/lang/Double;' : 'D';
-        case 'ObjectTypeAnnotation':
-          return 'Lcom/facebook/react/bridge/ReadableMap;';
-        case 'StringTypeAnnotation':
-          return 'Ljava/lang/String;';
-        default:
-          throw new Error(
-            `Unsupported union prop value, found: ${realTypeAnnotation.memberType}"`,
-          );
-      }
     case 'NumberTypeAnnotation':
       return !isRequired ? 'Ljava/lang/Double;' : 'D';
     case 'DoubleTypeAnnotation':
@@ -274,7 +225,7 @@ function translateParamTypeToJniType(
     case 'FunctionTypeAnnotation':
       return 'Lcom/facebook/react/bridge/Callback;';
     default:
-      (realTypeAnnotation.type: 'EnumDeclaration' | 'MixedTypeAnnotation');
+      (realTypeAnnotation.type: empty);
       throw new Error(
         `Unknown prop type for method arg, found: ${realTypeAnnotation.type}"`,
       );
@@ -309,30 +260,6 @@ function translateReturnTypeToJniType(
       return 'Ljava/lang/String;';
     case 'BooleanTypeAnnotation':
       return nullable ? 'Ljava/lang/Boolean;' : 'Z';
-    case 'EnumDeclaration':
-      switch (typeAnnotation.memberType) {
-        case 'NumberTypeAnnotation':
-          return nullable ? 'Ljava/lang/Double;' : 'D';
-        case 'StringTypeAnnotation':
-          return 'Ljava/lang/String;';
-        default:
-          throw new Error(
-            `Unknown enum prop type for method return type, found: ${realTypeAnnotation.type}"`,
-          );
-      }
-    case 'UnionTypeAnnotation':
-      switch (typeAnnotation.memberType) {
-        case 'NumberTypeAnnotation':
-          return nullable ? 'Ljava/lang/Double;' : 'D';
-        case 'ObjectTypeAnnotation':
-          return 'Lcom/facebook/react/bridge/WritableMap;';
-        case 'StringTypeAnnotation':
-          return 'Ljava/lang/String;';
-        default:
-          throw new Error(
-            `Unsupported union member type, found: ${realTypeAnnotation.memberType}"`,
-          );
-      }
     case 'NumberTypeAnnotation':
       return nullable ? 'Ljava/lang/Double;' : 'D';
     case 'DoubleTypeAnnotation':
@@ -350,7 +277,7 @@ function translateReturnTypeToJniType(
     case 'ArrayTypeAnnotation':
       return 'Lcom/facebook/react/bridge/WritableArray;';
     default:
-      (realTypeAnnotation.type: 'EnumDeclaration' | 'MixedTypeAnnotation');
+      (realTypeAnnotation.type: empty);
       throw new Error(
         `Unknown prop type for method return type, found: ${realTypeAnnotation.type}"`,
       );

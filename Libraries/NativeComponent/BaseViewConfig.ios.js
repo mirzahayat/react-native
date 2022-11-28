@@ -8,13 +8,12 @@
  * @flow strict-local
  */
 
-import type {PartialViewConfigWithoutName} from './PlatformBaseViewConfig';
-
-import ReactNativeStyleAttributes from '../Components/View/ReactNativeStyleAttributes';
 import {
-  ConditionallyIgnoredEventHandlers,
   DynamicallyInjectedByGestureHandler,
+  ConditionallyIgnoredEventHandlers,
 } from './ViewConfigIgnore';
+import ReactNativeStyleAttributes from '../Components/View/ReactNativeStyleAttributes';
+import type {PartialViewConfigWithoutName} from './PlatformBaseViewConfig';
 
 const bubblingEventTypes = {
   // Generic Events
@@ -100,10 +99,10 @@ const bubblingEventTypes = {
       bubbled: 'onPointerDown',
     },
   },
-  topPointerMove: {
+  topPointerMove2: {
     phasedRegistrationNames: {
-      captured: 'onPointerMoveCapture',
-      bubbled: 'onPointerMove',
+      captured: 'onPointerMove2Capture',
+      bubbled: 'onPointerMove2',
     },
   },
   topPointerUp: {
@@ -112,30 +111,18 @@ const bubblingEventTypes = {
       bubbled: 'onPointerUp',
     },
   },
-  topPointerEnter: {
+  topPointerEnter2: {
     phasedRegistrationNames: {
-      captured: 'onPointerEnterCapture',
-      bubbled: 'onPointerEnter',
+      captured: 'onPointerEnter2Capture',
+      bubbled: 'onPointerEnter2',
       skipBubbling: true,
     },
   },
-  topPointerLeave: {
+  topPointerLeave2: {
     phasedRegistrationNames: {
-      captured: 'onPointerLeaveCapture',
-      bubbled: 'onPointerLeave',
+      captured: 'onPointerLeave2Capture',
+      bubbled: 'onPointerLeave2',
       skipBubbling: true,
-    },
-  },
-  topPointerOver: {
-    phasedRegistrationNames: {
-      captured: 'onPointerOverCapture',
-      bubbled: 'onPointerOver',
-    },
-  },
-  topPointerOut: {
-    phasedRegistrationNames: {
-      captured: 'onPointerOutCapture',
-      bubbled: 'onPointerOut',
     },
   },
 };
@@ -194,7 +181,6 @@ const validAttributesForNonEventProps = {
   removeClippedSubviews: true,
   borderRadius: true,
   borderColor: {process: require('../StyleSheet/processColor')},
-  borderCurve: true,
   borderWidth: true,
   borderStyle: true,
   hitSlop: {diff: require('../Utilities/differ/insetsDiffer')},
@@ -249,43 +235,28 @@ const validAttributesForNonEventProps = {
   // borderEndWidth: true,
   // borderWidth: true,
 
-  margin: true,
-  marginBlock: true,
-  marginBlockEnd: true,
-  marginBlockStart: true,
-  marginBottom: true,
-  marginEnd: true,
-  marginHorizontal: true,
-  marginInline: true,
-  marginInlineEnd: true,
-  marginInlineStart: true,
-  marginLeft: true,
-  marginRight: true,
-  marginStart: true,
   marginTop: true,
+  marginRight: true,
+  marginBottom: true,
+  marginLeft: true,
+  marginStart: true,
+  marginEnd: true,
   marginVertical: true,
+  marginHorizontal: true,
+  margin: true,
 
-  padding: true,
-  paddingBlock: true,
-  paddingBlockEnd: true,
-  paddingBlockStart: true,
-  paddingBottom: true,
-  paddingEnd: true,
-  paddingHorizontal: true,
-  paddingInline: true,
-  paddingInlineEnd: true,
-  paddingInlineStart: true,
-  paddingLeft: true,
-  paddingRight: true,
-  paddingStart: true,
   paddingTop: true,
+  paddingRight: true,
+  paddingBottom: true,
+  paddingLeft: true,
+  paddingStart: true,
+  paddingEnd: true,
   paddingVertical: true,
+  paddingHorizontal: true,
+  padding: true,
 
   flex: true,
   flexGrow: true,
-  rowGap: true,
-  columnGap: true,
-  gap: true,
   flexShrink: true,
   flexBasis: true,
   flexDirection: true,
@@ -341,11 +312,9 @@ const validAttributesForEventProps = ConditionallyIgnoredEventHandlers({
   onPointerUp: true,
   onPointerDown: true,
   onPointerCancel: true,
-  onPointerEnter: true,
-  onPointerMove: true,
-  onPointerLeave: true,
-  onPointerOver: true,
-  onPointerOut: true,
+  onPointerEnter2: true,
+  onPointerMove2: true,
+  onPointerLeave2: true,
 });
 
 /**

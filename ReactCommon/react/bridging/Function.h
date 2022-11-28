@@ -10,7 +10,7 @@
 #include <react/bridging/Base.h>
 #include <react/bridging/CallbackWrapper.h>
 
-#include <butter/function.h>
+#include <folly/Function.h>
 
 namespace facebook::react {
 
@@ -154,8 +154,8 @@ struct Bridging<SyncCallback<R(Args...)>> {
 };
 
 template <typename R, typename... Args>
-struct Bridging<butter::function<R(Args...)>> {
-  using Func = butter::function<R(Args...)>;
+struct Bridging<folly::Function<R(Args...)>> {
+  using Func = folly::Function<R(Args...)>;
   using IndexSequence = std::index_sequence_for<Args...>;
 
   static constexpr size_t kArgumentCount = sizeof...(Args);
@@ -202,17 +202,13 @@ struct Bridging<butter::function<R(Args...)>> {
 };
 
 template <typename R, typename... Args>
-struct Bridging<
-    std::function<R(Args...)>,
-    std::enable_if_t<!std::is_same_v<
-        std::function<R(Args...)>,
-        butter::function<R(Args...)>>>>
-    : Bridging<butter::function<R(Args...)>> {};
+struct Bridging<std::function<R(Args...)>>
+    : Bridging<folly::Function<R(Args...)>> {};
 
 template <typename R, typename... Args>
-struct Bridging<R(Args...)> : Bridging<butter::function<R(Args...)>> {};
+struct Bridging<R(Args...)> : Bridging<folly::Function<R(Args...)>> {};
 
 template <typename R, typename... Args>
-struct Bridging<R (*)(Args...)> : Bridging<butter::function<R(Args...)>> {};
+struct Bridging<R (*)(Args...)> : Bridging<folly::Function<R(Args...)>> {};
 
 } // namespace facebook::react

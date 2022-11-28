@@ -8,8 +8,6 @@
  * @format
  */
 
-import type {RenderItemProps} from 'react-native/Libraries/Lists/VirtualizedList';
-
 import * as React from 'react';
 import {
   Animated,
@@ -51,7 +49,7 @@ function SwipeableCardExample() {
 
   const incrementCurrent = () => setCurrentIndex(currentIndex + 1);
 
-  const getCardColor = (index: number) => cardColors[index % cardColors.length];
+  const getCardColor = index => cardColors[index % cardColors.length];
 
   /*
    * The cards try to reuse the views. Instead of always rebuilding the current card on top
@@ -121,7 +119,7 @@ function SwipeableCard(props: {
   const {width} = useWindowDimensions();
   const rotation = movementX.interpolate({
     inputRange: [-width / 2, 0, width / 2],
-    outputRange: ['-5deg', '0deg', '5deg'],
+    outputRange: (['-5deg', '0deg', '5deg']: $ReadOnlyArray<string>),
     extrapolate: 'clamp',
   });
 
@@ -142,7 +140,7 @@ function SwipeableCard(props: {
 const cardData = Array(5);
 
 function Card(props: {color: string}) {
-  const renderItem = ({item, index}: RenderItemProps<$FlowFixMe>) => (
+  const renderItem = ({item, index}) => (
     <CardSection color={props.color} index={index} />
   );
 

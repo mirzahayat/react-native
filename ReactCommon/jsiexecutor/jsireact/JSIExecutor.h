@@ -15,7 +15,6 @@
 #include <jsi/jsi.h>
 #include <functional>
 #include <mutex>
-#include <optional>
 
 namespace facebook {
 namespace react {
@@ -117,7 +116,9 @@ class JSIExecutor : public JSExecutor {
   void callNativeModules(const jsi::Value &queue, bool isEndOfBatch);
   jsi::Value nativeCallSyncHook(const jsi::Value *args, size_t count);
   jsi::Value nativeRequire(const jsi::Value *args, size_t count);
+#ifdef DEBUG
   jsi::Value globalEvalWithSourceUrl(const jsi::Value *args, size_t count);
+#endif
 
   std::shared_ptr<jsi::Runtime> runtime_;
   std::shared_ptr<ExecutorDelegate> delegate_;
@@ -128,9 +129,9 @@ class JSIExecutor : public JSExecutor {
   JSIScopedTimeoutInvoker scopedTimeoutInvoker_;
   RuntimeInstaller runtimeInstaller_;
 
-  std::optional<jsi::Function> callFunctionReturnFlushedQueue_;
-  std::optional<jsi::Function> invokeCallbackAndReturnFlushedQueue_;
-  std::optional<jsi::Function> flushedQueue_;
+  folly::Optional<jsi::Function> callFunctionReturnFlushedQueue_;
+  folly::Optional<jsi::Function> invokeCallbackAndReturnFlushedQueue_;
+  folly::Optional<jsi::Function> flushedQueue_;
 };
 
 using Logger =

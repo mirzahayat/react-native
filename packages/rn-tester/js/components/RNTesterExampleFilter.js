@@ -80,12 +80,10 @@ class RNTesterExampleFilter<T> extends React.Component<Props<T>, State> {
   }
 
   _renderFilteredSections(
-    filteredSections: $ReadOnlyArray<{
-      data: Array<T>,
-      key: string,
-      title: string,
-    }>,
-  ): React.Node {
+    filteredSections: Array<
+      $TEMPORARY$object<{data: Array<T>, key: string, title: string}>,
+    >,
+  ): ?React.Element<any> {
     if (this.props.page === 'examples_page') {
       return (
         <ScrollView

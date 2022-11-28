@@ -18,6 +18,7 @@ const {
   Modal,
   SafeAreaView,
   StyleSheet,
+  Switch,
   Text,
   View,
 } = require('react-native');
@@ -26,17 +27,19 @@ class SafeAreaViewExample extends React.Component<
   {...},
   {|
     modalVisible: boolean,
+    emulateUnlessSupported: boolean,
   |},
 > {
-  state: {modalVisible: boolean} = {
+  state = {
     modalVisible: false,
+    emulateUnlessSupported: true,
   };
 
-  _setModalVisible = (visible: boolean) => {
+  _setModalVisible = visible => {
     this.setState({modalVisible: visible});
   };
 
-  render(): React.Node {
+  render() {
     return (
       <View>
         <Modal
@@ -45,11 +48,20 @@ class SafeAreaViewExample extends React.Component<
           animationType="slide"
           supportedOrientations={['portrait', 'landscape']}>
           <View style={styles.modal}>
-            <SafeAreaView style={styles.safeArea}>
+            <SafeAreaView
+              style={styles.safeArea}
+              emulateUnlessSupported={this.state.emulateUnlessSupported}>
               <View style={styles.safeAreaContent}>
                 <Button
                   onPress={this._setModalVisible.bind(this, false)}
                   title="Close"
+                />
+                <Text>emulateUnlessSupported:</Text>
+                <Switch
+                  onValueChange={value =>
+                    this.setState({emulateUnlessSupported: value})
+                  }
+                  value={this.state.emulateUnlessSupported}
                 />
               </View>
             </SafeAreaView>
@@ -59,13 +71,20 @@ class SafeAreaViewExample extends React.Component<
           onPress={this._setModalVisible.bind(this, true)}
           title="Present Modal Screen with SafeAreaView"
         />
+        <Text>emulateUnlessSupported:</Text>
+        <Switch
+          onValueChange={value =>
+            this.setState({emulateUnlessSupported: value})
+          }
+          value={this.state.emulateUnlessSupported}
+        />
       </View>
     );
   }
 }
 
 class IsIPhoneXExample extends React.Component<{...}> {
-  render(): React.Node {
+  render() {
     return (
       <View>
         <Text>

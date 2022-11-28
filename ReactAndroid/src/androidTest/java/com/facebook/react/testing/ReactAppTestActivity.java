@@ -37,7 +37,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.react.testing.idledetection.ReactBridgeIdleSignaler;
 import com.facebook.react.testing.idledetection.ReactIdleDetectionUtil;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -218,8 +218,8 @@ public class ReactAppTestActivity extends FragmentActivity
       builder.setReactPackageTurboModuleManagerDelegateBuilder(
           spec.getReactPackageTurboModuleManagerDelegateBuilder());
     }
-    if (spec.getJSExceptionHandler() != null) {
-      builder.setJSExceptionHandler(spec.getJSExceptionHandler());
+    if (spec.getNativeModuleCallExceptionHandler() != null) {
+      builder.setNativeModuleCallExceptionHandler(spec.getNativeModuleCallExceptionHandler());
     }
 
     if (!spec.getAlternativeReactPackagesForTest().isEmpty()) {
@@ -250,8 +250,7 @@ public class ReactAppTestActivity extends FragmentActivity
               public List<JSIModuleSpec> getJSIModules(
                   final ReactApplicationContext reactApplicationContext,
                   final JavaScriptContextHolder jsContext) {
-                List<JSIModuleSpec> packages = new ArrayList<>();
-                packages.add(
+                return Arrays.<JSIModuleSpec>asList(
                     new JSIModuleSpec() {
                       @Override
                       public JSIModuleType getJSIModuleType() {
@@ -277,10 +276,6 @@ public class ReactAppTestActivity extends FragmentActivity
                         };
                       }
                     });
-                if (spec.getJSIModuleBuilder() != null) {
-                  packages.addAll(spec.getJSIModuleBuilder().build(reactApplicationContext));
-                }
-                return packages;
               }
             });
 

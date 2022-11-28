@@ -12,14 +12,12 @@
 
 import type {AnimatedComponentType} from 'react-native/Libraries/Animated/createAnimatedComponent';
 import typeof FlatListType from 'react-native/Libraries/Lists/FlatList';
-import type {RenderItemProps} from 'react-native/Libraries/Lists/VirtualizedListProps';
 
 import type {RNTesterModuleExample} from '../../types/RNTesterTypes';
 import * as React from 'react';
 import {
   Alert,
   Animated,
-  I18nManager,
   Platform,
   StyleSheet,
   TextInput,
@@ -65,10 +63,7 @@ type State = {|
   fadingEdgeLength: number,
   onPressDisabled: boolean,
   textSelectable: boolean,
-  isRTL: boolean,
 |};
-
-const IS_RTL = I18nManager.isRTL;
 
 class FlatListExample extends React.PureComponent<Props, State> {
   state: State = {
@@ -85,49 +80,32 @@ class FlatListExample extends React.PureComponent<Props, State> {
     fadingEdgeLength: 0,
     onPressDisabled: false,
     textSelectable: true,
-    isRTL: IS_RTL,
   };
 
-  /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
-   * LTI update could not be added via codemod */
   _onChangeFilterText = filterText => {
     this.setState({filterText});
   };
 
   _onChangeScrollToIndex = (text: mixed) => {
-    this._listRef?.scrollToIndex({viewPosition: 0.5, index: Number(text)});
+    this._listRef.scrollToIndex({viewPosition: 0.5, index: Number(text)});
   };
 
-  // $FlowFixMe[missing-local-annot]
   _scrollPos = new Animated.Value(0);
-  // $FlowFixMe[missing-local-annot]
   _scrollSinkX = Animated.event(
     [{nativeEvent: {contentOffset: {x: this._scrollPos}}}],
     {useNativeDriver: true},
   );
-  // $FlowFixMe[missing-local-annot]
   _scrollSinkY = Animated.event(
     [{nativeEvent: {contentOffset: {y: this._scrollPos}}}],
     {useNativeDriver: true},
   );
 
   componentDidUpdate() {
-    this._listRef?.recordInteraction(); // e.g. flipping logViewable switch
+    this._listRef.recordInteraction(); // e.g. flipping logViewable switch
   }
 
   _setBooleanValue: string => boolean => void = key => value =>
     this.setState({[key]: value});
-
-  _setIsRTL: boolean => void = value => {
-    I18nManager.forceRTL(value);
-    this.setState({isRTL: value});
-    Alert.alert(
-      'Reload this page',
-      'Please reload this page to change the UI direction! ' +
-        'All examples in this app will be affected. ' +
-        'Check them out to see what they look like in RTL layout.',
-    );
-  };
 
   render(): React.Node {
     const filterRegex = new RegExp(String(this.state.filterText), 'i');
@@ -204,11 +182,6 @@ class FlatListExample extends React.PureComponent<Props, State> {
                 this.state.useFlatListItemComponent,
                 this._setBooleanValue('useFlatListItemComponent'),
               )}
-              {renderSmallSwitchOption(
-                'Is RTL',
-                this.state.isRTL,
-                this._setIsRTL,
-              )}
               {Platform.OS === 'android' && (
                 <View>
                   <TextInput
@@ -271,11 +244,10 @@ class FlatListExample extends React.PureComponent<Props, State> {
         React.ElementConfig<FlatListType>,
         React.ElementRef<FlatListType>,
       >,
-    > | null,
+    >,
   ) => {
     this._listRef = ref;
   };
-  // $FlowFixMe[missing-local-annot]
   _getItemLayout = (data: any, index: number) => {
     return getItemLayout(data, index, this.state.horizontal);
   };
@@ -287,36 +259,37 @@ class FlatListExample extends React.PureComponent<Props, State> {
       data: state.data.concat(genItemData(100, state.data.length)),
     }));
   };
-  // $FlowFixMe[missing-local-annot]
   _onPressCallback = () => {
     const {onPressDisabled} = this.state;
     const warning = () => console.log('onPress disabled');
     const onPressAction = onPressDisabled ? warning : this._pressItem;
     return onPressAction;
   };
-  // $FlowFixMe[missing-local-annot]
   _onRefresh = () => Alert.alert('onRefresh: nothing to refresh :P');
-  // $FlowFixMe[missing-local-annot]
   _renderItemComponent = () => {
-    const renderProp = ({item, separators}: RenderItemProps<Item>) => {
-      return (
-        <ItemComponent
-          item={item}
-          horizontal={this.state.horizontal}
-          fixedHeight={this.state.fixedHeight}
-          onPress={this._onPressCallback()}
-          onShowUnderlay={separators.highlight}
-          onHideUnderlay={separators.unhighlight}
-          textSelectable={this.state.textSelectable}
-        />
-      );
+    const flatListPropKey = this.state.useFlatListItemComponent
+      ? 'ListItemComponent'
+      : 'renderItem';
+
+    return {
+      renderItem: undefined,
+      /* $FlowFixMe[invalid-computed-prop] (>=0.111.0 site=react_native_fb)
+       * This comment suppresses an error found when Flow v0.111 was deployed.
+       * To see the error, delete this comment and run Flow. */
+      [flatListPropKey]: ({item, separators}) => {
+        return (
+          <ItemComponent
+            item={item}
+            horizontal={this.state.horizontal}
+            fixedHeight={this.state.fixedHeight}
+            onPress={this._onPressCallback()}
+            onShowUnderlay={separators.highlight}
+            onHideUnderlay={separators.unhighlight}
+            textSelectable={this.state.textSelectable}
+          />
+        );
+      },
     };
-    return this.state.useFlatListItemComponent
-      ? {
-          renderItem: undefined,
-          ListItemComponent: renderProp,
-        }
-      : {renderItem: renderProp};
   };
   // This is called when items change viewability by scrolling into or out of
   // the viewable area.
@@ -341,7 +314,7 @@ class FlatListExample extends React.PureComponent<Props, State> {
   };
 
   _pressItem = (key: string) => {
-    this._listRef?.recordInteraction();
+    this._listRef && this._listRef.recordInteraction();
     const index = Number(key);
     const itemState = pressItem(this.state.data[index]);
     this.setState(state => ({
@@ -354,7 +327,7 @@ class FlatListExample extends React.PureComponent<Props, State> {
     }));
   };
 
-  _listRef: React.ElementRef<typeof Animated.FlatList> | null;
+  _listRef: React.ElementRef<typeof Animated.FlatList>;
 }
 
 const styles = StyleSheet.create({

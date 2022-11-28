@@ -24,9 +24,6 @@
   if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 10) {
     _runner.testSuffix = [NSString stringWithFormat:@"-iOS%d", UIDevice.currentDevice.systemVersion.intValue];
   }
-
-  // To update snapshots, set recordMode to YES and re-run RNTesterSnapshotTests.
-  // Do not forget to set back to NO before committing your changes.
   _runner.recordMode = NO;
 }
 
@@ -40,6 +37,10 @@ RCT_TEST(ViewExample)
 RCT_TEST(LayoutExample)
 RCT_TEST(ScrollViewExample)
 RCT_TEST(TextExample)
+#if !TARGET_OS_TV
+// No switch available on tvOS
+RCT_TEST(SwitchExample)
+#endif
 
 - (void)testZZZNotInRecordMode
 {

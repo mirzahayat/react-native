@@ -7,9 +7,6 @@
 
 #import "RNTesterTurboModuleProvider.h"
 
-#ifdef RCT_NEW_ARCH_ENABLED
-#import <NativeCxxModuleExample/NativeCxxModuleExample.h>
-#endif
 #import <React/CoreModulesPlugins.h>
 #import <ReactCommon/RCTSampleTurboModule.h>
 #import <ReactCommon/SampleTurboCxxModule.h>
@@ -31,11 +28,7 @@ std::shared_ptr<TurboModule> RNTesterTurboModuleProvider(
   if (name == "SampleTurboCxxModule") {
     return std::make_shared<SampleTurboCxxModule>(jsInvoker);
   }
-#ifdef RCT_NEW_ARCH_ENABLED
-  if (name == "NativeCxxModuleExampleCxx") {
-    return std::make_shared<NativeCxxModuleExample>(jsInvoker);
-  }
-#endif
+
   return nullptr;
 }
 

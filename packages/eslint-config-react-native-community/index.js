@@ -23,7 +23,7 @@ module.exports = {
     'react',
     'react-hooks',
     'react-native',
-    '@react-native',
+    '@react-native-community',
     'jest',
   ],
 
@@ -36,14 +36,14 @@ module.exports = {
   overrides: [
     {
       files: ['*.js'],
-      parser: '@babel/eslint-parser',
-      plugins: ['ft-flow'],
+      parser: 'babel-eslint',
+      plugins: ['flowtype'],
       rules: {
         // Flow Plugin
-        // The following rules are made available via `eslint-plugin-ft-flow`
+        // The following rules are made available via `eslint-plugin-flowtype`
 
-        'ft-flow/define-flow-type': 1,
-        'ft-flow/use-flow-type': 1,
+        'flowtype/define-flow-type': 1,
+        'flowtype/use-flow-type': 1,
       },
     },
     {
@@ -53,10 +53,7 @@ module.exports = {
       rules: {
         '@typescript-eslint/no-unused-vars': [
           'error',
-          {
-            argsIgnorePattern: '^_',
-            destructuredArrayIgnorePattern: '^_',
-          },
+          {argsIgnorePattern: '^_'},
         ],
         'no-unused-vars': 'off',
         'no-shadow': 'off',
@@ -88,7 +85,6 @@ module.exports = {
     __dirname: false,
     __fbBatchedBridgeConfig: false,
     AbortController: false,
-    Blob: true,
     alert: false,
     cancelAnimationFrame: false,
     cancelIdleCallback: false,
@@ -103,7 +99,6 @@ module.exports = {
     EventTarget: false,
     exports: false,
     fetch: false,
-    File: true,
     FileReader: false,
     FormData: false,
     global: false,

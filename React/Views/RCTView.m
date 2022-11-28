@@ -7,11 +7,9 @@
 
 #import "RCTView.h"
 
-#import <QuartzCore/QuartzCore.h>
 #import <React/RCTMockDef.h>
 
 #import "RCTAutoInsetsProtocol.h"
-#import "RCTBorderCurve.h"
 #import "RCTBorderDrawing.h"
 #import "RCTI18nUtil.h"
 #import "RCTLog.h"
@@ -128,7 +126,6 @@ static NSString *RCTRecursiveAccessibilityLabel(UIView *view)
     _borderBottomRightRadius = -1;
     _borderBottomStartRadius = -1;
     _borderBottomEndRadius = -1;
-    _borderCurve = RCTBorderCurveCircular;
     _borderStyle = RCTBorderStyleSolid;
     _hitTestEdgeInsets = UIEdgeInsetsZero;
 
@@ -948,20 +945,6 @@ setBorderColor() setBorderColor(Top) setBorderColor(Right) setBorderColor(Bottom
                     setBorderRadius(TopEnd) setBorderRadius(BottomLeft) setBorderRadius(BottomRight)
                         setBorderRadius(BottomStart) setBorderRadius(BottomEnd)
 
-#pragma mark - Border Curve
-
-#define setBorderCurve(side)                            \
-  -(void)setBorder##side##Curve : (RCTBorderCurve)curve \
-  {                                                     \
-    if (_border##side##Curve == curve) {                \
-      return;                                           \
-    }                                                   \
-    _border##side##Curve = curve;                       \
-    [self.layer setNeedsDisplay];                       \
-  }
-
-                            setBorderCurve()
-
 #pragma mark - Border Style
 
 #define setBorderStyle(side)                            \
@@ -974,6 +957,6 @@ setBorderColor() setBorderColor(Top) setBorderColor(Right) setBorderColor(Bottom
     [self.layer setNeedsDisplay];                       \
   }
 
-                                setBorderStyle()
+                            setBorderStyle()
 
-                                    @end
+                                @end

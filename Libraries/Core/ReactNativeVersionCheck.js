@@ -9,7 +9,6 @@
  */
 
 import Platform from '../Utilities/Platform';
-
 const ReactNativeVersion = require('./ReactNativeVersion');
 
 /**
@@ -40,7 +39,15 @@ exports.checkVersions = function checkVersions(): void {
 };
 
 function _formatVersion(
-  version: (typeof Platform)['constants']['reactNativeVersion'],
+  version:
+    | {major: number, minor: number, patch: number, prerelease: ?number}
+    | {major: number, minor: number, patch: number, prerelease: ?string}
+    | $TEMPORARY$object<{
+        major: number,
+        minor: number,
+        patch: number,
+        prerelease: null,
+      }>,
 ): string {
   return (
     `${version.major}.${version.minor}.${version.patch}` +

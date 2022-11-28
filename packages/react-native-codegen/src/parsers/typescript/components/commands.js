@@ -14,18 +14,22 @@ import type {
   NamedShape,
   CommandTypeAnnotation,
 } from '../../../CodegenSchema.js';
-import type {TypeDeclarationMap} from '../../utils';
-const {parseTopLevelType} = require('../parseTopLevelType');
+import type {TypeDeclarationMap} from '../utils.js';
+
+const {getValueFromTypes} = require('../utils.js');
 
 type EventTypeAST = Object;
 
-function buildCommandSchemaInternal(
-  name: string,
-  optional: boolean,
-  parameters: Array<$FlowFixMe>,
-  types: TypeDeclarationMap,
-): NamedShape<CommandTypeAnnotation> {
-  const firstParam = parameters[0].typeAnnotation;
+function buildCommandSchema(property: EventTypeAST, types: TypeDeclarationMap) {
+  const name = property.key.name;
+  const optional = property.optional || false;
+  const value = getValueFromTypes(
+    property.typeAnnotation.typeAnnotation,
+    types,
+  );
+
+  const firstParam = value.parameters[0].typeAnnotation;
+
   if (
     !(
       firstParam.typeAnnotation != null &&
@@ -39,12 +43,12 @@ function buildCommandSchemaInternal(
     );
   }
 
-  const params = parameters.slice(1).map(param => {
+  const params = value.parameters.slice(1).map(param => {
     const paramName = param.name;
-    const paramValue = parseTopLevelType(
+    const paramValue = getValueFromTypes(
       param.typeAnnotation.typeAnnotation,
       types,
-    ).type;
+    );
 
     const type =
       paramValue.type === 'TSTypeReference'
@@ -93,7 +97,6 @@ function buildCommandSchemaInternal(
 
     return {
       name: paramName,
-      optional: false,
       typeAnnotation: returnType,
     };
   });
@@ -111,37 +114,12 @@ function buildCommandSchemaInternal(
   };
 }
 
-function buildCommandSchema(
-  property: EventTypeAST,
-  types: TypeDeclarationMap,
-): NamedShape<CommandTypeAnnotation> {
-  if (property.type === 'TSPropertySignature') {
-    const topLevelType = parseTopLevelType(
-      property.typeAnnotation.typeAnnotation,
-      types,
-    );
-    const name = property.key.name;
-    const optional = property.optional || topLevelType.optional;
-    const parameters = topLevelType.type.parameters || topLevelType.type.params;
-    return buildCommandSchemaInternal(name, optional, parameters, types);
-  } else {
-    const name = property.key.name;
-    const optional = property.optional || false;
-    const parameters = property.parameters || property.params;
-    return buildCommandSchemaInternal(name, optional, parameters, types);
-  }
-}
-
 function getCommands(
   commandTypeAST: $ReadOnlyArray<EventTypeAST>,
   types: TypeDeclarationMap,
 ): $ReadOnlyArray<NamedShape<CommandTypeAnnotation>> {
   return commandTypeAST
-    .filter(
-      property =>
-        property.type === 'TSPropertySignature' ||
-        property.type === 'TSMethodSignature',
-    )
+    .filter(property => property.type === 'TSPropertySignature')
     .map(property => buildCommandSchema(property, types))
     .filter(Boolean);
 }

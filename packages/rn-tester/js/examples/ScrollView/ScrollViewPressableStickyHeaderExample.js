@@ -8,15 +8,15 @@
  * @format
  */
 
-import * as React from 'react';
 import {
-  Button,
+  StyleSheet,
+  View,
+  Text,
   Pressable,
   ScrollView,
-  StyleSheet,
-  Text,
-  View,
+  Button,
 } from 'react-native';
+import * as React from 'react';
 
 function StickyHeader() {
   const [backgroundColor, setBackgroundColor] = React.useState('blue');
@@ -51,7 +51,7 @@ function renderComponent1(i: number) {
 }
 
 export default function ScrollViewPressableStickyHeaderExample(): React.Node {
-  const scrollRef = React.useRef<$FlowFixMe>(null);
+  const scrollRef = React.useRef(null);
   const components = [];
   for (var i = 1; i < 10; i++) {
     components.push(renderComponent1(i));

@@ -39,16 +39,15 @@ class XHRExampleFetch extends React.Component<any, any> {
       });
   }
 
-  _renderHeaders(): null | Array<React.Node> {
+  _renderHeaders() {
     if (!this.responseHeaders) {
       return null;
     }
 
-    const responseHeaders: Array<React.Node> = [];
+    const responseHeaders = [];
     const keys = Object.keys(this.responseHeaders.map);
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
-      // $FlowFixMe[incompatible-use]
       const value = this.responseHeaders.get(key);
       responseHeaders.push(
         <Text>

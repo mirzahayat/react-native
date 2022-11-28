@@ -11,6 +11,7 @@
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/core/ShadowNodeFragment.h>
 #include <react/renderer/debug/SystraceSection.h>
+#include <react/renderer/graphics/Geometry.h>
 #include <react/renderer/uimanager/SurfaceRegistryBinding.h>
 #include <react/renderer/uimanager/UIManagerBinding.h>
 #include <react/renderer/uimanager/UIManagerCommitHook.h>
@@ -51,7 +52,7 @@ UIManager::~UIManager() {
                << ").";
 }
 
-ShadowNode::Shared UIManager::createNode(
+SharedShadowNode UIManager::createNode(
     Tag tag,
     std::string const &name,
     SurfaceId surfaceId,
@@ -89,7 +90,7 @@ ShadowNode::Shared UIManager::createNode(
       },
       family);
 
-  if (delegate_ != nullptr) {
+  if (delegate_) {
     delegate_->uiManagerDidCreateShadowNode(*shadowNode);
   }
   if (leakChecker_) {
@@ -99,9 +100,9 @@ ShadowNode::Shared UIManager::createNode(
   return shadowNode;
 }
 
-ShadowNode::Shared UIManager::cloneNode(
+SharedShadowNode UIManager::cloneNode(
     ShadowNode const &shadowNode,
-    ShadowNode::SharedListOfShared const &children,
+    SharedShadowNodeSharedList const &children,
     RawProps const *rawProps) const {
   SystraceSection s("UIManager::cloneNode");
 
@@ -113,12 +114,15 @@ ShadowNode::Shared UIManager::cloneNode(
       shadowNode,
       {
           /* .props = */
-          rawProps != nullptr
-              ? componentDescriptor.cloneProps(
-                    propsParserContext, shadowNode.getProps(), *rawProps)
-              : ShadowNodeFragment::propsPlaceholder(),
+          rawProps ? componentDescriptor.cloneProps(
+                         propsParserContext, shadowNode.getProps(), *rawProps)
+                   : ShadowNodeFragment::propsPlaceholder(),
           /* .children = */ children,
       });
+
+  if (delegate_) {
+    delegate_->uiManagerDidCloneShadowNode(shadowNode, *clonedShadowNode);
+  }
 
   return clonedShadowNode;
 }
@@ -134,7 +138,7 @@ void UIManager::appendChild(
 
 void UIManager::completeSurface(
     SurfaceId surfaceId,
-    ShadowNode::UnsharedListOfShared const &rootChildren,
+    SharedShadowNodeUnsharedList const &rootChildren,
     ShadowTree::CommitOptions commitOptions) const {
   SystraceSection s("UIManager::completeSurface");
 
@@ -156,7 +160,7 @@ void UIManager::setIsJSResponder(
     ShadowNode::Shared const &shadowNode,
     bool isJSResponder,
     bool blockNativeResponder) const {
-  if (delegate_ != nullptr) {
+  if (delegate_) {
     delegate_->uiManagerDidSetIsJSResponder(
         shadowNode, isJSResponder, blockNativeResponder);
   }
@@ -256,7 +260,7 @@ LayoutMetrics UIManager::getRelativeLayoutMetrics(
   // that the node is not deallocated during method execution lifetime.
   auto owningAncestorShadowNode = ShadowNode::Shared{};
 
-  if (ancestorShadowNode == nullptr) {
+  if (!ancestorShadowNode) {
     shadowTreeRegistry_.visit(
         shadowNode.getSurfaceId(), [&](ShadowTree const &shadowTree) {
           owningAncestorShadowNode =
@@ -274,7 +278,7 @@ LayoutMetrics UIManager::getRelativeLayoutMetrics(
   auto layoutableAncestorShadowNode =
       traitCast<LayoutableShadowNode const *>(ancestorShadowNode);
 
-  if (layoutableAncestorShadowNode == nullptr) {
+  if (!layoutableAncestorShadowNode) {
     return EmptyLayoutMetrics;
   }
 
@@ -324,7 +328,7 @@ void UIManager::dispatchCommand(
     const ShadowNode::Shared &shadowNode,
     std::string const &commandName,
     folly::dynamic const &args) const {
-  if (delegate_ != nullptr) {
+  if (delegate_) {
     delegate_->uiManagerDidDispatchCommand(shadowNode, commandName, args);
   }
 }
@@ -332,7 +336,7 @@ void UIManager::dispatchCommand(
 void UIManager::sendAccessibilityEvent(
     const ShadowNode::Shared &shadowNode,
     std::string const &eventType) {
-  if (delegate_ != nullptr) {
+  if (delegate_) {
     delegate_->uiManagerDidSendAccessibilityEvent(shadowNode, eventType);
   }
 }
@@ -342,7 +346,7 @@ void UIManager::configureNextLayoutAnimation(
     RawValue const &config,
     jsi::Value const &successCallback,
     jsi::Value const &failureCallback) const {
-  if (animationDelegate_ != nullptr) {
+  if (animationDelegate_) {
     animationDelegate_->uiManagerDidConfigureNextLayoutAnimation(
         runtime,
         config,
@@ -416,11 +420,11 @@ RootShadowNode::Unshared UIManager::shadowTreeWillCommit(
 }
 
 void UIManager::shadowTreeDidFinishTransaction(
-    ShadowTree const & /*shadowTree*/,
+    ShadowTree const &shadowTree,
     MountingCoordinator::Shared const &mountingCoordinator) const {
   SystraceSection s("UIManager::shadowTreeDidFinishTransaction");
 
-  if (delegate_ != nullptr) {
+  if (delegate_) {
     delegate_->uiManagerDidFinishTransaction(mountingCoordinator);
   }
 }

@@ -20,7 +20,7 @@ class ColorSchemeSubscription extends React.Component<
 > {
   _subscription: ?EventSubscription;
 
-  state: {colorScheme: ?string, ...} = {
+  state = {
     colorScheme: Appearance.getColorScheme(),
   };
 
@@ -37,7 +37,7 @@ class ColorSchemeSubscription extends React.Component<
     this._subscription?.remove();
   }
 
-  render(): React.Node {
+  render() {
     return (
       <RNTesterThemeContext.Consumer>
         {theme => {
@@ -52,7 +52,7 @@ class ColorSchemeSubscription extends React.Component<
   }
 }
 
-const ThemedContainer = (props: {children: React.Node}) => (
+const ThemedContainer = props => (
   <RNTesterThemeContext.Consumer>
     {theme => {
       return (
@@ -69,7 +69,7 @@ const ThemedContainer = (props: {children: React.Node}) => (
   </RNTesterThemeContext.Consumer>
 );
 
-const ThemedText = (props: {children: React.Node}) => (
+const ThemedText = props => (
   <RNTesterThemeContext.Consumer>
     {theme => {
       return <Text style={{color: theme.LabelColor}}>{props.children}</Text>;
@@ -89,7 +89,7 @@ const AppearanceViaHook = () => {
   );
 };
 
-const ColorShowcase = (props: {themeName: string}) => (
+const ColorShowcase = props => (
   <RNTesterThemeContext.Consumer>
     {theme => {
       return (

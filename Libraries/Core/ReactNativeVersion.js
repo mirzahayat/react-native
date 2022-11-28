@@ -10,8 +10,8 @@
  */
 
 exports.version = {
-  major: 1000,
-  minor: 0,
-  patch: 0,
+  major: 0,
+  minor: 69,
+  patch: 7,
   prerelease: null,
 };

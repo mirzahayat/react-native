@@ -13,17 +13,10 @@ module.exports = {
   transform: {
     '^.+\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$':
       '<rootDir>/jest/assetFileTransformer.js',
-    '.*': './jest/private/preprocessor.js',
+    '.*': './jest/preprocessor_DO_NOT_USE.js',
   },
   setupFiles: ['./jest/setup.js'],
-  fakeTimers: {
-    enableGlobally: true,
-    legacyFakeTimers: true,
-  },
-  snapshotFormat: {
-    escapeString: true,
-    printBasicPrototype: true,
-  },
+  timers: 'fake',
   testRegex: '/__tests__/.*-test\\.js$',
   testPathIgnorePatterns: [
     '/node_modules/',

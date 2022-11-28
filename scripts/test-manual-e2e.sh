@@ -91,7 +91,7 @@ test_ios_jsc(){
     success "About to test iOS JSC... "
     success "Installing CocoaPods dependencies..."
     rm -rf packages/rn-tester/Pods
-    (cd packages/rn-tester && USE_HERMES=0 bundle exec pod install)
+    (cd packages/rn-tester && bundle exec pod install)
 
     info "Press any key to open the workspace in Xcode, then build and test manually."
     info ""
@@ -141,6 +141,7 @@ init_template_app(){
 
     info "Double checking the versions in package.json are correct:"
     grep "\"react-native\": \".*react-native-$PACKAGE_VERSION-$TIMESTAMP.tgz\"" "/tmp/${project_name}/package.json" || error "Incorrect version number in /tmp/${project_name}/package.json"
+    grep -E "com.facebook.react:react-native:\\+" "${project_name}/android/app/build.gradle" || error "Dependency in /tmp/${project_name}/android/app/build.gradle must be com.facebook.react:react-native:+"
 
     success "New sample project generated at /tmp/${project_name}"
     popd >/dev/null || exit
@@ -218,7 +219,7 @@ handle_menu_input(){
     read -p "Would you like to test something else? (Y/N)" confirm
     if [ "$confirm" == "${confirm#[Yy]}" ]; then
         info "Next steps:"
-        info "https://reactnative.dev/contributing/release-candidate-minor"
+        info "https://github.com/facebook/react-native/wiki/Release-Process"
         popd >/dev/null || exit
         exit 1
     else
@@ -235,3 +236,4 @@ init(){
 }
 
 init
+

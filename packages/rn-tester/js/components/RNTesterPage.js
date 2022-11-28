@@ -23,11 +23,7 @@ type Props = $ReadOnly<{|
 class RNTesterPage extends React.Component<Props> {
   render(): React.Node {
     let ContentWrapper;
-    let wrapperProps: {
-      automaticallyAdjustContentInsets?: boolean,
-      keyboardShouldPersistTaps?: string,
-      keyboardDismissMode?: string,
-    } = {};
+    let wrapperProps = {};
     if (this.props.noScroll) {
       ContentWrapper = ((View: any): React.ComponentType<any>);
     } else {

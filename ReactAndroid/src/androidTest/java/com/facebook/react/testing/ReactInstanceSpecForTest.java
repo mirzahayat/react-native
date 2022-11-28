@@ -11,12 +11,10 @@ import android.annotation.SuppressLint;
 import androidx.annotation.Nullable;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.ReactPackageTurboModuleManagerDelegate;
-import com.facebook.react.bridge.JSExceptionHandler;
-import com.facebook.react.bridge.JSIModuleSpec;
 import com.facebook.react.bridge.JavaScriptExecutorFactory;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
-import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.NativeModuleCallExceptionHandler;
 import com.facebook.react.uimanager.ViewManager;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,34 +28,29 @@ import java.util.List;
 @SuppressLint("JavatestsIncorrectFolder")
 public class ReactInstanceSpecForTest {
 
-  public abstract static class JSIModuleBuilder {
-    @Nullable
-    protected abstract List<JSIModuleSpec> build(ReactApplicationContext context);
-  }
-
   private final List<NativeModule> mNativeModules =
       new ArrayList<NativeModule>(Arrays.asList(new FakeWebSocketModule()));
   private final List<Class<? extends JavaScriptModule>> mJSModuleSpecs = new ArrayList<>();
   private final List<ViewManager> mViewManagers = new ArrayList<>();
   private final ArrayList<ReactPackage> mReactPackages = new ArrayList<>();
-  @Nullable private JSExceptionHandler mJSExceptionHandler = null;
+  @Nullable private NativeModuleCallExceptionHandler mNativeModuleCallExceptionHandler = null;
   @Nullable private FabricUIManagerFactory mFabricUIManagerFactory = null;
   @Nullable private JavaScriptExecutorFactory mJavaScriptExecutorFactory = null;
   @Nullable private ReactPackageTurboModuleManagerDelegate.Builder mTMMDelegateBuilder = null;
-  @Nullable private JSIModuleBuilder mJSIModuleBuilder = null;
 
   public ReactInstanceSpecForTest addNativeModule(NativeModule module) {
     mNativeModules.add(module);
     return this;
   }
 
-  public ReactInstanceSpecForTest setJSExceptionHandler(JSExceptionHandler jSExceptionHandler) {
-    mJSExceptionHandler = jSExceptionHandler;
+  public ReactInstanceSpecForTest setNativeModuleCallExceptionHandler(
+      NativeModuleCallExceptionHandler nativeModuleCallExceptionHandler) {
+    mNativeModuleCallExceptionHandler = nativeModuleCallExceptionHandler;
     return this;
   }
 
-  public JSExceptionHandler getJSExceptionHandler() {
-    return mJSExceptionHandler;
+  public NativeModuleCallExceptionHandler getNativeModuleCallExceptionHandler() {
+    return mNativeModuleCallExceptionHandler;
   }
 
   public ReactInstanceSpecForTest setJavaScriptExecutorFactory(
@@ -92,20 +85,9 @@ public class ReactInstanceSpecForTest {
     return this;
   }
 
-  @Nullable
-  protected ReactPackageTurboModuleManagerDelegate.Builder
+  protected @Nullable ReactPackageTurboModuleManagerDelegate.Builder
       getReactPackageTurboModuleManagerDelegateBuilder() {
     return mTMMDelegateBuilder;
-  }
-
-  public ReactInstanceSpecForTest setJSIModuleBuilder(@Nullable JSIModuleBuilder builder) {
-    mJSIModuleBuilder = builder;
-    return this;
-  }
-
-  @Nullable
-  protected JSIModuleBuilder getJSIModuleBuilder() {
-    return mJSIModuleBuilder;
   }
 
   public ReactInstanceSpecForTest addPackages(List<ReactPackage> reactPackages) {

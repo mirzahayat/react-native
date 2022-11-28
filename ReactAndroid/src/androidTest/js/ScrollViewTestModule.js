@@ -10,11 +10,6 @@
 
 'use strict';
 
-import type {
-  PressEvent,
-  ScrollEvent,
-} from 'react-native/Libraries/Types/CoreEventTypes';
-
 const BatchedBridge = require('react-native/Libraries/BatchedBridge/BatchedBridge');
 const React = require('react');
 
@@ -31,6 +26,8 @@ const {ScrollListener} = NativeModules;
 
 const NUM_ITEMS = 100;
 
+import type {PressEvent} from 'react-native/Libraries/Types/CoreEventTypes';
+
 // Shared by integration tests for ScrollView and HorizontalScrollView
 
 let scrollViewApp: ScrollViewTestApp | HorizontalScrollViewTestApp;
@@ -43,7 +40,7 @@ type ItemProps = $ReadOnly<{|
 type ItemState = {||};
 
 class Item extends React.Component<ItemProps, ItemState> {
-  render(): React.Node {
+  render() {
     return (
       <TouchableWithoutFeedback onPress={this.props.onPress}>
         <View style={styles.item_container}>
@@ -64,28 +61,28 @@ const getInitialState = function () {
   };
 };
 
-const onScroll = function (e: ScrollEvent) {
+const onScroll = function (e) {
   ScrollListener.onScroll(
     e.nativeEvent.contentOffset.x,
     e.nativeEvent.contentOffset.y,
   );
 };
 
-const onScrollBeginDrag = function (e: ScrollEvent) {
+const onScrollBeginDrag = function (e) {
   ScrollListener.onScrollBeginDrag(
     e.nativeEvent.contentOffset.x,
     e.nativeEvent.contentOffset.y,
   );
 };
 
-const onScrollEndDrag = function (e: ScrollEvent) {
+const onScrollEndDrag = function (e) {
   ScrollListener.onScrollEndDrag(
     e.nativeEvent.contentOffset.x,
     e.nativeEvent.contentOffset.y,
   );
 };
 
-const onItemPress = function (itemNumber: number) {
+const onItemPress = function (itemNumber) {
   ScrollListener.onItemPress(itemNumber);
 };
 

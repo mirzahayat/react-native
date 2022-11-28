@@ -15,7 +15,7 @@ const React = require('react');
 
 const {Alert, Platform, ToastAndroid, Text, View} = require('react-native');
 
-function burnCPU(milliseconds: number) {
+function burnCPU(milliseconds) {
   const start = global.performance.now();
   while (global.performance.now() < start + milliseconds) {}
 }
@@ -27,7 +27,7 @@ class RequestIdleCallbackTester extends React.Component<
   RequestIdleCallbackTesterProps,
   RequestIdleCallbackTesterState,
 > {
-  state: RequestIdleCallbackTesterState = {
+  state = {
     message: '-',
   };
 
@@ -41,7 +41,7 @@ class RequestIdleCallbackTester extends React.Component<
     }
   }
 
-  render(): React.Node {
+  render() {
     return (
       <View>
         {/* $FlowFixMe[method-unbinding] added when improving typing for this
@@ -117,11 +117,7 @@ class RequestIdleCallbackTester extends React.Component<
       this._idleTimer = null;
     }
 
-    const handler = (deadline: {
-      didTimeout: boolean,
-      timeRemaining: () => number,
-      ...
-    }) => {
+    const handler = deadline => {
       while (deadline.timeRemaining() > 5) {
         burnCPU(5);
         this.setState({
@@ -159,7 +155,7 @@ class TimerTester extends React.Component<TimerTesterProps> {
   _immediateId: ?Object = null;
   _timerFn: ?() => any = null;
 
-  render(): any {
+  render() {
     const args =
       'fn' + (this.props.dt !== undefined ? ', ' + this.props.dt : '');
     return (
@@ -274,13 +270,13 @@ class IntervalExample extends React.Component<
     showTimer: boolean,
   |},
 > {
-  state: {showTimer: boolean} = {
+  state = {
     showTimer: true,
   };
 
   _timerTester: ?React.ElementRef<typeof TimerTester>;
 
-  render(): React.Node {
+  render() {
     return (
       <View>
         {this.state.showTimer && this._renderTimer()}
@@ -291,7 +287,7 @@ class IntervalExample extends React.Component<
     );
   }
 
-  _renderTimer = (): React.Node => {
+  _renderTimer = () => {
     return (
       <View>
         <TimerTester

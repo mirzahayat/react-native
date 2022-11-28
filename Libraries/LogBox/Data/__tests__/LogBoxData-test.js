@@ -4,9 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @flow
+ * @emails oncall+react_native
  * @format
- * @oncall react_native
+ * @flow
  */
 
 'use strict';
@@ -16,8 +16,8 @@ jest.mock('../../../Core/Devtools/parseErrorStack', () => {
 
 jest.mock('../../../Core/ExceptionsManager');
 
-const ExceptionsManager: any = require('../../../Core/ExceptionsManager');
 const LogBoxData = require('../LogBoxData');
+const ExceptionsManager: any = require('../../../Core/ExceptionsManager');
 
 const registry = () => {
   const observer = jest.fn();
@@ -51,7 +51,7 @@ const observe = () => {
   };
 };
 
-const addLogs = (logs: Array<string>, options: void | {flush: boolean}) => {
+const addLogs = (logs, options) => {
   logs.forEach(message => {
     LogBoxData.addLog({
       level: 'warn',
@@ -68,48 +68,52 @@ const addLogs = (logs: Array<string>, options: void | {flush: boolean}) => {
   });
 };
 
-const addSoftErrors = (
-  errors: Array<string>,
-  options: void | {flush: boolean},
-) => {
+const addSoftErrors = (errors, options) => {
   errors.forEach(error => {
-    LogBoxData.addException({
-      message: '',
-      isComponentError: false,
-      originalMessage: '',
-      name: 'console.error',
-      componentStack: '',
-      stack: [],
-      id: 0,
-      isFatal: false,
-      ...(typeof error === 'string'
-        ? {message: error, originalMessage: error}
-        : error),
-    });
+    LogBoxData.addException(
+      Object.assign(
+        {},
+        {
+          message: '',
+          isComponentError: false,
+          originalMessage: '',
+          name: 'console.error',
+          componentStack: '',
+          stack: [],
+          id: 0,
+          isFatal: false,
+        },
+        typeof error === 'string'
+          ? {message: error, originalMessage: error}
+          : error,
+      ),
+    );
     if (options == null || options.flush !== false) {
       jest.runOnlyPendingTimers();
     }
   });
 };
 
-const addFatalErrors = (
-  errors: Array<$FlowFixMe>,
-  options: void | {flush: boolean},
-) => {
+const addFatalErrors = (errors, options) => {
   errors.forEach(error => {
-    LogBoxData.addException({
-      message: '',
-      isComponentError: false,
-      originalMessage: '',
-      name: 'console.error',
-      componentStack: '',
-      stack: [],
-      id: 0,
-      isFatal: true,
-      ...(typeof error === 'string'
-        ? {message: error, originalMessage: error}
-        : error),
-    });
+    LogBoxData.addException(
+      Object.assign(
+        {},
+        {
+          message: '',
+          isComponentError: false,
+          originalMessage: '',
+          name: 'console.error',
+          componentStack: '',
+          stack: [],
+          id: 0,
+          isFatal: true,
+        },
+        typeof error === 'string'
+          ? {message: error, originalMessage: error}
+          : error,
+      ),
+    );
     if (options == null || options.flush !== false) {
       // Errors include two timers, the second is for optimistic symbolication.
       jest.runOnlyPendingTimers();
@@ -118,7 +122,7 @@ const addFatalErrors = (
   });
 };
 
-const addSyntaxError = (options: $FlowFixMe) => {
+const addSyntaxError = options => {
   addFatalErrors(
     [
       {

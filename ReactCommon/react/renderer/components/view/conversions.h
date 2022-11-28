@@ -15,6 +15,7 @@
 #include <react/renderer/components/view/primitives.h>
 #include <react/renderer/core/LayoutMetrics.h>
 #include <react/renderer/core/PropsParserContext.h>
+#include <react/renderer/graphics/Geometry.h>
 #include <react/renderer/graphics/Transform.h>
 #include <stdlib.h>
 #include <yoga/YGEnums.h>
@@ -391,11 +392,8 @@ inline void fromRawValue(
             YGUnitPercent};
         return;
       } else {
-        auto tryValue = folly::tryTo<float>(stringValue);
-        if (tryValue.hasValue()) {
-          result = YGValue{tryValue.value(), YGUnitPoint};
-          return;
-        }
+        result = YGValue{folly::to<float>(stringValue), YGUnitPoint};
+        return;
       }
     }
   }
@@ -559,24 +557,6 @@ inline void fromRawValue(
     return;
   }
   LOG(FATAL) << "Could not parse BackfaceVisibility:" << stringValue;
-  react_native_assert(false);
-}
-
-inline void fromRawValue(
-    const PropsParserContext &context,
-    const RawValue &value,
-    BorderCurve &result) {
-  react_native_assert(value.hasType<std::string>());
-  auto stringValue = (std::string)value;
-  if (stringValue == "circular") {
-    result = BorderCurve::Circular;
-    return;
-  }
-  if (stringValue == "continuous") {
-    result = BorderCurve::Continuous;
-    return;
-  }
-  LOG(FATAL) << "Could not parse BorderCurve:" << stringValue;
   react_native_assert(false);
 }
 

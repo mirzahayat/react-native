@@ -39,7 +39,7 @@ class TimersTest extends React.Component<Props, State> {
   };
 
   setTimeout(fn: () => void, time: number): TimeoutID {
-    const id: TimeoutID = setTimeout(() => {
+    const id = setTimeout(() => {
       this._timeoutIDs.delete(id);
       fn();
     }, time);
@@ -70,7 +70,7 @@ class TimersTest extends React.Component<Props, State> {
   }
 
   setImmediate(fn: () => void): ImmediateID {
-    const id: any = setImmediate(() => {
+    const id = setImmediate(() => {
       this._immediateIDs.delete(id);
       fn();
     });
@@ -81,7 +81,7 @@ class TimersTest extends React.Component<Props, State> {
   }
 
   requestAnimationFrame(fn: () => void): AnimationFrameID {
-    const id: AnimationFrameID = requestAnimationFrame(() => {
+    const id = requestAnimationFrame(() => {
       this._animationFrameIDs.delete(id);
       fn();
     });
@@ -253,7 +253,7 @@ class TimersTest extends React.Component<Props, State> {
     );
   }
 
-  _incrementInterval(): void {
+  _incrementInterval() {
     if (this.state.count > 3) {
       throw new Error('interval incremented past end.');
     }

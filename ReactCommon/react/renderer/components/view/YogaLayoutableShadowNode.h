@@ -18,13 +18,12 @@
 #include <react/renderer/core/Sealable.h>
 #include <react/renderer/core/ShadowNode.h>
 #include <react/renderer/debug/DebugStringConvertible.h>
+#include <react/renderer/graphics/Geometry.h>
 
 namespace facebook {
 namespace react {
 
 class YogaLayoutableShadowNode : public LayoutableShadowNode {
-  using CompactValue = facebook::yoga::detail::CompactValue;
-
  public:
   using UnsharedList = butter::small_vector<
       YogaLayoutableShadowNode *,
@@ -173,14 +172,6 @@ class YogaLayoutableShadowNode : public LayoutableShadowNode {
    */
   static void swapLeftAndRightInYogaStyleProps(
       YogaLayoutableShadowNode const &shadowNode);
-
-  /*
-   * Combine a base YGStyle with aliased properties which should be flattened
-   * into it. E.g. reconciling "marginInlineStart" and "marginStart".
-   */
-  static YGStyle applyAliasedProps(
-      const YGStyle &baseStyle,
-      const YogaStylableProps &props);
 
 #pragma mark - Consistency Ensuring Helpers
 
