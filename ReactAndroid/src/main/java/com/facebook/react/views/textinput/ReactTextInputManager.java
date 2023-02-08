@@ -1200,12 +1200,19 @@ public class ReactTextInputManager extends BaseViewManager<ReactEditText, Layout
       // Lets normalize them. See https://github.com/facebook/react-native/issues/18579
       int realStart = Math.min(start, end);
       int realEnd = Math.max(start, end);
+      
+      Layout layout = mReactEditText.getLayout();
+      int line = layout.getLineForOffset(start);
+      int baseline = layout.getLineBaseline(line);
+      int ascent = layout.getLineAscent(line);
+      float cursorPositionX = layout.getPrimaryHorizontal(start);
+      float cursorPositionY = baseline + ascent;
+
 
       if (mPreviousSelectionStart != realStart || mPreviousSelectionEnd != realEnd) {
         mEventDispatcher.dispatchEvent(
             new ReactTextInputSelectionEvent(
-                mSurfaceId, mReactEditText.getId(), realStart, realEnd));
-
+                mSurfaceId, mReactEditText.getId(), realStart, realEnd, PixelUtil.toDIPFromPixel(cursorPositionX), PixelUtil.toDIPFromPixel(cursorPositionY)));
         mPreviousSelectionStart = realStart;
         mPreviousSelectionEnd = realEnd;
       }
